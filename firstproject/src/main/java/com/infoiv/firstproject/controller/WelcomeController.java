@@ -1,17 +1,27 @@
 package com.infoiv.firstproject.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.infoiv.firstproject.entity.Greeting;
+import com.infoiv.firstproject.service.GreetingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/greeting")
 public class WelcomeController {
 
-    @GetMapping("/{name}")
-    public String message(@PathVariable String name){
-        return  String.format("Hello %s , welcome to firstproject app!",name);
+    @Autowired
+    private GreetingService greetSvc;
+
+    @PostMapping
+    public String message(Greeting greet){
+        this.greetSvc.save(greet);
+        return  String.format("Hello %s , welcome to firstproject app!",greet.getName());
+    }
+    @GetMapping("/greetings")
+    public List<Greeting> greetings(){
+        return  this.greetSvc.getAllGreeting();
     }
 
 
